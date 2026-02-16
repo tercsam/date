@@ -2,163 +2,134 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Une Invitation Spéciale</title>
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* --- CONFIGURATION GLOBALE --- */
         body, html {
             height: 100%;
             margin: 0;
-            overflow: hidden; /* Important pour l'immersion */
+            padding: 0;
+            overflow: hidden;
             font-family: 'Nunito', sans-serif;
+            -webkit-tap-highlight-color: transparent; /* Enlève le carré gris au clic sur iPhone */
         }
 
-        /* --- FOND ANIMÉ (Le "Background Mesh") --- */
+        /* --- FOND ANIMÉ --- */
         .background {
-            position: absolute;
+            position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, #ffdde1, #ee9ca7);
+            background: linear-gradient(to top, #fad0c4 0%, #ffd1ff 100%);
             z-index: -2;
         }
 
         .blob {
             position: absolute;
             border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
+            filter: blur(60px);
+            opacity: 0.5;
             animation: float 10s infinite alternate;
             z-index: -1;
         }
-        .blob-1 { background: #ff9a9e; width: 300px; height: 300px; top: 10%; left: 10%; }
-        .blob-2 { background: #fad0c4; width: 400px; height: 400px; bottom: 10%; right: 10%; animation-delay: -5s; }
-        .blob-3 { background: #ffdde1; width: 200px; height: 200px; top: 40%; left: 50%; transform: translate(-50%, -50%); }
+        .blob-1 { background: #ff9a9e; width: 200px; height: 200px; top: 10%; left: 5%; }
+        .blob-2 { background: #fad0c4; width: 250px; height: 250px; bottom: 10%; right: 5%; }
 
         @keyframes float {
             0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, 50px) scale(1.1); }
+            100% { transform: translate(20px, 30px) scale(1.1); }
         }
 
-        /* --- LA CARTE (Glassmorphism) --- */
+        /* --- LA CARTE --- */
         .container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 100dvh; /* Utilise dynamic viewport height pour mobile */
+            padding: 20px;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.65);
-            backdrop-filter: blur(20px); /* L'effet verre flouté */
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 30px;
-            padding: 40px;
-            width: 90%;
-            max-width: 450px;
+            padding: 30px 20px;
+            width: 100%;
+            max-width: 400px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             position: relative;
-            transition: transform 0.3s ease;
+            z-index: 10;
         }
 
         h1 {
             font-family: 'Great Vibes', cursive;
             color: #d6336c;
-            font-size: 3.5rem;
+            font-size: 2.8rem; /* Un peu plus petit pour mobile */
             margin: 0;
-            text-shadow: 2px 2px 0px rgba(255,255,255,0.5);
         }
 
         p {
-            color: #555;
-            font-size: 1.2rem;
+            color: #444;
+            font-size: 1.05rem;
+            line-height: 1.4;
             margin: 15px 0;
         }
 
-        /* Le Ticket Date */
+        /* Le Ticket */
         .ticket {
             background: white;
-            border-left: 5px solid #d6336c;
-            padding: 15px;
-            margin: 25px 0;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 4px solid #d6336c;
+            padding: 12px;
+            margin: 20px 0;
+            border-radius: 12px;
             display: flex;
             justify-content: space-around;
             align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
         
-        .ticket-item {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .ticket-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: #999;
-            font-weight: 700;
-        }
-        
-        .ticket-value {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #333;
-        }
+        .ticket-label { font-size: 0.7rem; text-transform: uppercase; color: #999; font-weight: 700; }
+        .ticket-value { font-size: 1rem; font-weight: 700; color: #333; }
 
         /* Les Boutons */
         .btn-group {
-            margin-top: 30px;
+            margin-top: 25px;
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            position: relative;
-            min-height: 60px;
+            flex-direction: column; /* Superposés sur mobile pour faciliter le clic */
+            gap: 15px;
+            align-items: center;
         }
 
         button {
-            padding: 12px 30px;
+            padding: 14px 0;
+            width: 80%;
             border-radius: 50px;
             border: none;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Nunito', sans-serif;
+            transition: all 0.2s ease;
         }
 
         .btn-yes {
             background: #d6336c;
             color: white;
-            box-shadow: 0 4px 15px rgba(214, 51, 108, 0.4);
-        }
-
-        .btn-yes:hover {
-            transform: scale(1.05);
-            background: #c2255c;
+            box-shadow: 0 4px 15px rgba(214, 51, 108, 0.3);
+            order: 1; /* Le Oui en premier */
         }
 
         .btn-no {
-            background: #e9ecef;
+            background: rgba(233, 236, 239, 0.8);
             color: #495057;
+            order: 2;
+            transition: none; /* Pour que la fuite soit instantanée */
         }
 
-        /* --- MESSAGE FINAL --- */
-        #success-screen {
-            display: none;
-            text-align: center;
-        }
-        
-        .big-emoji {
-            font-size: 5rem;
-            animation: bounce 1s infinite alternate;
-        }
-
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-10px); }
-        }
+        /* --- ÉCRANS --- */
+        #success-screen { display: none; }
+        .big-emoji { font-size: 4rem; margin-bottom: 10px; }
 
         /* --- ANIMATION PLUIE --- */
         .falling-element {
@@ -170,9 +141,15 @@
         }
 
         @keyframes fall {
-            to { transform: translateY(110vh) rotate(720deg); }
+            to { transform: translateY(110vh) rotate(360deg); }
         }
 
+        /* Ajustements pour écrans très petits (iPhone SE, etc.) */
+        @media (max-width: 370px) {
+            h1 { font-size: 2.2rem; }
+            p { font-size: 0.95rem; }
+            .card { padding: 20px 15px; }
+        }
     </style>
 </head>
 <body>
@@ -180,14 +157,13 @@
     <div class="background">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
     </div>
 
     <div class="container">
-        <div class="card" id="main-card">
+        <div class="card">
             
             <div id="question-screen">
-                <div style="font-size: 3rem; margin-bottom: 10px;">🍒✨</div>
+                <div style="font-size: 2.5rem; margin-bottom: 5px;">🍒✨</div>
                 <h1>Pour Tanie</h1>
                 <p>Parce que je t'aime et que ma vie est tellement plus belle depuis que tu es là.</p>
 
@@ -196,25 +172,26 @@
                         <span class="ticket-label">Quand ?</span>
                         <span class="ticket-value">Mardi 17 Fév.</span>
                     </div>
-                    <div style="font-size: 1.5rem; color:#ddd;">|</div>
+                    <div style="font-size: 1.2rem; color:#eee;">|</div>
                     <div class="ticket-item">
                         <span class="ticket-label">Heure ?</span>
                         <span class="ticket-value">18h00</span>
                     </div>
                 </div>
 
-                <p>On se fait un date ? ❤️</p>
+                <p style="font-weight: 700;">Accepte tu de me voir ? ❤️</p>
 
                 <div class="btn-group">
-                    <button class="btn-no" id="btnNo">Non merci</button>
                     <button class="btn-yes" id="btnYes">OUI avec plaisir !</button>
+                    <button class="btn-no" id="btnNo">Non merci</button>
                 </div>
             </div>
 
             <div id="success-screen">
                 <div class="big-emoji">🥰🍒💖</div>
-                <h1>Rendez-vous demain à 18h.</h1>
-                <small style="color: #d6336c;">(Je t'aime)</small>
+                <h1 style="font-size: 2.2rem;">endez-vous demain à 18h !</h1>
+                <p>je t'attendrais avec un bouquet de fleur.</p>
+                <small style="color: #d6336c; font-weight: 700;">(Je t'aime)</small>
             </div>
 
         </div>
@@ -226,64 +203,50 @@
         const questionScreen = document.getElementById('question-screen');
         const successScreen = document.getElementById('success-screen');
 
-        // --- 1. BOUTON FUYARD ---
-        const moveButton = () => {
-            const card = document.querySelector('.card');
-            const cardRect = card.getBoundingClientRect();
+        const moveButton = (e) => {
+            // Empêche le clic accidentel sur mobile
+            if(e) e.preventDefault();
             
-            // On calcule pour que le bouton reste dans la carte si possible, ou sorte un peu mais pas trop
-            const maxX = window.innerWidth - 100;
-            const maxY = window.innerHeight - 50;
+            // On s'assure que le bouton ne sorte pas des limites de l'écran visible
+            const padding = 20;
+            const maxX = window.innerWidth - btnNo.offsetWidth - padding;
+            const maxY = window.innerHeight - btnNo.offsetHeight - padding;
             
-            const randomX = Math.random() * maxX;
-            const randomY = Math.random() * maxY;
+            const randomX = Math.max(padding, Math.random() * maxX);
+            const randomY = Math.max(padding, Math.random() * maxY);
 
             btnNo.style.position = 'fixed';
-            btnNo.style.left = randomX + 'px';
-            btnNo.style.top = randomY + 'px';
-            btnNo.style.zIndex = '1000'; // Passe au dessus de tout
+            btnNo.style.left = `${randomX}px`;
+            btnNo.style.top = `${randomY}px`;
+            btnNo.style.width = 'auto';
+            btnNo.style.padding = '10px 20px';
+            btnNo.style.zIndex = '1000';
         };
 
+        // Événements mobile et bureau
+        btnNo.addEventListener('touchstart', moveButton);
         btnNo.addEventListener('mouseover', moveButton);
-        btnNo.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
 
-        // --- 2. ACCEPTATION ---
         btnYes.addEventListener('click', () => {
             questionScreen.style.display = 'none';
             successScreen.style.display = 'block';
-            btnNo.style.display = 'none'; // On cache le bouton non
+            btnNo.style.display = 'none';
             launchConfetti();
         });
 
-        // --- 3. PLUIE DE CERISES ET COEURS ---
         function launchConfetti() {
-            const symbols = ['🍒', '🍒', '❤️', '💖', '🌹', '✨', '💕'];
-            const colors = ['#ff0000', '#ff69b4', '#ff1493'];
-            
-            // On crée 50 éléments
-            for (let i = 0; i < 60; i++) {
+            const symbols = ['🍒', '❤️', '💖', '✨', '💕'];
+            for (let i = 0; i < 50; i++) {
                 setTimeout(() => {
                     const el = document.createElement('div');
                     el.classList.add('falling-element');
-                    
-                    // Choix aléatoire du symbole
                     el.innerText = symbols[Math.floor(Math.random() * symbols.length)];
-                    
-                    // Position horizontale aléatoire
-                    el.style.left = Math.random() * 100 + 'vw';
-                    
-                    // Taille variable
-                    const size = Math.random() * 2 + 1; // entre 1rem et 3rem
-                    el.style.fontSize = size + 'rem';
-                    
-                    // Vitesse variable
-                    el.style.animationDuration = (Math.random() * 3 + 2) + 's'; // entre 2 et 5 sec
-                    
+                    el.style.left = Math.random() * 95 + 'vw';
+                    el.style.fontSize = (Math.random() * 1.5 + 1) + 'rem';
+                    el.style.animationDuration = (Math.random() * 2 + 3) + 's';
                     document.body.appendChild(el);
-
-                    // Nettoyage après l'animation
-                    setTimeout(() => el.remove(), 6000);
-                }, i * 100); // Délai en cascade
+                    setTimeout(() => el.remove(), 5000);
+                }, i * 80);
             }
         }
     </script>
